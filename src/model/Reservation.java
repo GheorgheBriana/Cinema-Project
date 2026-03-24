@@ -77,4 +77,16 @@ public class Reservation {
     public void setReservationDate(LocalDate reservationDate) {
         this.reservationDate = reservationDate;
     }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", movie='" + movie + '\'' +
+                ", roomNumber=" + roomNumber +
+                ", customerName='" + customerName + '\'' +
+                ", numberOfSeats=" + numberOfSeats +
+                ", reservationDate=" + reservationDate +
+                '}';
+    }
 }

@@ -5,6 +5,7 @@ import repository.ReservationRepository;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -74,8 +75,18 @@ public class Main {
                         Reservation reservation = new Reservation(movie, roomNumber, customerName, numberOfSeats, reservationDate);
                         reservationRepository.addReservation(reservation);
                         break;
+
                     case 2:
                         System.out.println("Ai ales: afisareRezervari");
+                        read.nextLine();
+
+                        System.out.println("Scrie numele clientului: ");
+                        String searchedName = read.nextLine();
+
+                        List<Reservation> reservationList = reservationRepository.getReservationsByCustomerName(searchedName);
+                        for(Reservation reservationItem : reservationList) {
+                            System.out.println(reservationItem);
+                        }
                         break;
                     case 3:
                         System.out.println("Ai ales: verificareCapacitate");
