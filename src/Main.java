@@ -1,14 +1,18 @@
 import config.DBConnection;
+import model.Reservation;
+import repository.ReservationRepository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner read = new Scanner(System.in);
-
         DBConnection dbConnection = new DBConnection();
+        ReservationRepository reservationRepository = new ReservationRepository(dbConnection);
+
         try {
             Connection connection = dbConnection.getConnection();
             System.out.println("Database connected successfully! " + connection);
@@ -45,7 +49,30 @@ public class Main {
 
                 switch (option) {
                     case 1:
-                        System.out.println("Ai ales: rezervare");
+                        System.out.println("Ai ales: adaugaRezervare");
+                        read.nextLine();
+
+                        System.out.println("Scrie numele filmului: ");
+                        String movie = read.nextLine();
+
+                        System.out.println("Alege numărul sălii: ");
+                        int roomNumber = read.nextInt();
+                        read.nextLine();
+
+                        System.out.println("Scrie numele clientului: ");
+                        String customerName = read.nextLine();
+
+                        System.out.println("Scrie numărul de locuri pe care dorești să-l rezervi.");
+                        int numberOfSeats = read.nextInt();
+                        read.nextLine();
+
+                        System.out.println("Scrie data rezervării (aaaa-ll-zz): ");
+                        String dateText = read.nextLine();
+                        LocalDate reservationDate = LocalDate.parse(dateText);
+
+                        // create object + call addReservation method
+                        Reservation reservation = new Reservation(movie, roomNumber, customerName, numberOfSeats, reservationDate);
+                        reservationRepository.addReservation(reservation);
                         break;
                     case 2:
                         System.out.println("Ai ales: afisareRezervari");
