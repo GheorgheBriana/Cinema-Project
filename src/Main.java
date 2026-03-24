@@ -1,8 +1,22 @@
+import config.DBConnection;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner read = new Scanner(System.in);
+
+        DBConnection dbConnection = new DBConnection();
+        try {
+            Connection connection = dbConnection.getConnection();
+            System.out.println("Database connected successfully! " + connection);
+        } catch (SQLException e) {
+            System.out.println("Database connection failed!");
+            System.out.println(e.getMessage());
+            return;
+        }
 
         System.out.println("Write your username: ");
         String username = read.nextLine();
@@ -18,7 +32,6 @@ public class Main {
             System.out.println("Logare reușită!");
 
             boolean running = true;
-
             while (running) {
                 System.out.println("1. rezervare");
                 System.out.println("2. afisareRezervari");
@@ -29,6 +42,7 @@ public class Main {
 
                 System.out.println("Alege o optiune: ");
                 int option = read.nextInt();
+
                 switch (option) {
                     case 1:
                         System.out.println("Ai ales: rezervare");
