@@ -1,4 +1,5 @@
 import config.DBConnection;
+import model.Movie;
 import model.Reservation;
 import repository.ReservationRepository;
 
@@ -53,17 +54,25 @@ public class Main {
                         System.out.println("Ai ales: adaugaRezervare");
                         read.nextLine();
 
-                        System.out.println("Scrie numele filmului: ");
-                        String movie = read.nextLine();
+                        System.out.println("Alege un film din lista:");
+                        Movie.showMovies();
+                        int movieOption = Integer.parseInt(read.nextLine());
 
-                        System.out.println("Alege numărul sălii: ");
+                        String movie = Movie.getMovieByOption(movieOption);
+
+                        if (movie == null) {
+                            System.out.println("Opțiune invalidă pentru film!");
+                            continue;
+                        }
+
+                        System.out.println("Introdu numărul sălii: ");
                         int roomNumber = read.nextInt();
                         read.nextLine();
 
-                        System.out.println("Scrie numele clientului: ");
+                        System.out.println("Introdu numele clientului: ");
                         String customerName = read.nextLine();
 
-                        System.out.println("Scrie numărul de locuri pe care dorești să-l rezervi.");
+                        System.out.println("Introdu numărul de locuri:");
                         int numberOfSeats = read.nextInt();
                         read.nextLine();
 
