@@ -106,7 +106,11 @@ public class ReservationRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public int getAvailableSeats(int roomNumber, LocalDate reservationDate) {
+        int reservedSeats = getReservedSeatsForRoomAndDate(roomNumber, reservationDate);
+        return 20 - reservedSeats;
     }
 
 

@@ -99,6 +99,24 @@ public class Main {
                         break;
                     case 3:
                         System.out.println("Ai ales: verificareCapacitate");
+                        read.nextLine();
+
+                        System.out.println("Scrie numărul sălii: ");
+                        int roomToCheck = read.nextInt();
+                        read.nextLine();
+
+                        if (roomToCheck < 1 || roomToCheck > 9) {
+                            System.out.println("Număr de sală invalid!");
+                            break;
+                        }
+
+                        System.out.println("Scrie data rezervării (aaaa-ll-zz): ");
+                        String checkDateText = read.nextLine();
+                        LocalDate checkDate = LocalDate.parse(checkDateText);
+
+                        int availableSeats = reservationRepository.getAvailableSeats(roomToCheck, checkDate);
+
+                        System.out.println("Locuri libere rămase în sala " + roomToCheck + ": " + availableSeats);
                         break;
                     case 4:
                         System.out.println("Ai ales: stergeRezervare");
