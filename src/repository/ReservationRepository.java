@@ -6,6 +6,7 @@ import model.Reservation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,26 @@ public class ReservationRepository {
     }
 
     public void addReservation(Reservation reservation) {
+        if (reservation.getReservationDate().isBefore(LocalDate.now())) {
+            System.out.println("Data rezervării nu poate fi mai mică decât data curentă!");
+            return;
+        }
+
+        if (reservation.getRoomNumber() < 1 || reservation.getRoomNumber() > 9) {
+            System.out.println("Număr de sală invalid! Cinematograful are doar săli de la 1 la 9.");
+            return;
+        }
+
+        int reservedSeats = getReservedSeatsForRoomAndDate(
+                reservation.getRoomNumber(),
+                reservation.getReservationDate()
+        );
+
+        if (reservedSeats + reservation.getNumberOfSeats() > 20) {
+            System.out.println("Sală plină!");
+            return;
+        }
+
         try {
             Connection connection = dbConnection.getConnection();
             String sql = "INSERT INTO reservations (movie, room_number, customer_name, number_of_seats, reservation_date) VALUES (?,?,?,?,?)";
@@ -31,6 +52,7 @@ public class ReservationRepository {
             System.out.println("Rezervare adăugată cu succes!");
         } catch (SQLException e) {
             System.out.println("Eroare la adăugarea rezervării.");
+            System.out.println(e.getMessage());
         }
 
     }
@@ -65,4 +87,27 @@ public class ReservationRepository {
 
         return reservationArrayList;
     }
+
+    public int getReservedSeatsForRoomAndDate(int roomNumber, LocalDate reservationDate) {
+        try {
+            Connection connection = dbConnection.getConnection();
+            String sql = "SELECT SUM(number_of_seats) FROM reservations WHERE room_number = ? AND reservation_date = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, roomNumber);
+            statement.setDate(2, java.sql.Date.valueOf(reservationDate));
+
+            var resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
 }
