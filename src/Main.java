@@ -2,6 +2,7 @@ import config.DBConnection;
 import model.Movie;
 import model.Reservation;
 import repository.ReservationRepository;
+import service.TxtExportService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ public class Main {
         Scanner read = new Scanner(System.in);
         DBConnection dbConnection = new DBConnection();
         ReservationRepository reservationRepository = new ReservationRepository(dbConnection);
+        TxtExportService txtExportService = new TxtExportService();
 
         try {
             Connection connection = dbConnection.getConnection();
@@ -127,7 +129,19 @@ public class Main {
                         reservationRepository.deleteReservationById(reservationId);
                         break;
                     case 5:
-                        System.out.println("Ai ales: salvareText");
+                        System.out.println("Ai ales: salvareTxt");
+                        read.nextLine();
+
+                        System.out.println("Scrie numele clientului pentru care vrei să salvezi rezervările: ");
+                        String exportCustomerName = read.nextLine();
+
+                        List<Reservation> reservationsToExport = reservationRepository.getReservationsByCustomerName(exportCustomerName);
+
+                        if (reservationsToExport.isEmpty()) {
+                            System.out.println("Nu există rezervări pentru acest client.");
+                        } else {
+                            txtExportService.saveReservationsToTxt(exportCustomerName, reservationsToExport);
+                        }
                         break;
                     case 0:
                         System.out.println("Aplicația se oprește!");
