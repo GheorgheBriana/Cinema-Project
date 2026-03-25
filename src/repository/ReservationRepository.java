@@ -113,5 +113,25 @@ public class ReservationRepository {
         return 20 - reservedSeats;
     }
 
+    public void deleteReservationById(int id) {
+        try {
+            Connection connection = dbConnection.getConnection();
+            String sql = "DELETE FROM reservations WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Rezervarea a fost ștearsă cu succes!");
+            } else {
+                System.out.println("Nu există nicio rezervare cu acest id.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Eroare la ștergerea rezervării.");
+            System.out.println(e.getMessage());
+        }
+    }
 
 }

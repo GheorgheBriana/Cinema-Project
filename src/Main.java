@@ -120,6 +120,11 @@ public class Main {
                         break;
                     case 4:
                         System.out.println("Ai ales: stergeRezervare");
+                        System.out.println("Scrie id-ul rezervării pe care vrei să o ștergi: ");
+                        int reservationId = read.nextInt();
+                        read.nextLine();
+
+                        reservationRepository.deleteReservationById(reservationId);
                         break;
                     case 5:
                         System.out.println("Ai ales: salvareText");
